@@ -62,14 +62,16 @@ def create_accounts():
 ######################################################################
 
 # ... place you code here to LIST accounts ...
-@app.route('/accounts',methods=['GET'])
+
+
+@app.route('/accounts', methods=['GET'])
 def list_accounts():
     """LIst all accounts"""
     app.logger.info("Requesst to list accounts")
-    accounts=Account.all()
-    list_accounts=[account.serialize() for account in accounts]
-    app.logger.info("Returning [%s] accounts",len(list_accounts))
-    return jsonify(list_accounts),status.HTTP_200_OK
+    accounts = Account.all()
+    list_accounts = [account.serialize() for account in accounts]
+    app.logger.info("Returning [%s] accounts", len(list_accounts))
+    return jsonify(list_accounts), status.HTTP_200_OK
 
 
 ######################################################################
@@ -80,30 +82,32 @@ def list_accounts():
 @app.route('/accounts/<id>')
 def read_account(id):
     """read an account"""
-    account=Account.find(id)
+    account = Account.find(id)
     if not account:
-        abort(status.HTTP_404_NOT_FOUND,f"Account not found with id {id}")
-    
-    account_data=account.serialize()
-    return account_data,status.HTTP_200_OK
+        abort(status.HTTP_404_NOT_FOUND, f"Account not found with id {id}")
+
+    account_data = account.serialize()
+    return account_data, status.HTTP_200_OK
 
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
 
 # ... place you code here to UPDATE an account ...
-@app.route("/accounts/<int:account_id>",methods=['PUT'])
+
+
+@app.route("/accounts/<int:account_id>", methods=['PUT'])
 def update_account(account_id):
     """updata account"""
     app.logger.info("Request to update an existing account with id {account_id}")
 
-    account=Account.find(account_id)
+    account = Account.find(account_id)
     if not account:
-        abort(status.HTTP_404_NOT_FOUND,"Account with id {account_id}")
-    
-    account=account.deserialize(request.get_json())
+        abort(status.HTTP_404_NOT_FOUND, "Account with id {account_id}")
+
+    account = account.deserialize(request.get_json())
     account.update()
-    return account.serialize(),status.HTTP_200_OK
+    return account.serialize(), status.HTTP_200_OK
 
 
 ######################################################################
@@ -111,16 +115,15 @@ def update_account(account_id):
 ######################################################################
 
 # ... place you code here to DELETE an account ...
-@app.route('/accounts/<int:account_id>',methods=['DELETE'])
+@app.route('/accounts/<int:account_id>', methods=['DELETE'])
 def delete_account(account_id):
     """delete account"""
     app.logger.info("Request to delete an Account with id: %s", account_id)
 
-    account=Account.find(account_id)
+    account = Account.find(account_id)
     if account:
         account.delete()
-        return "",status.HTTP_204_NO_CONTENT
-
+        return "", status.HTTP_204_NO_CONTENT
 
 
 ######################################################################
@@ -138,4 +141,3 @@ def check_content_type(media_type):
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         f"Content-Type must be {media_type}",
     )
-
