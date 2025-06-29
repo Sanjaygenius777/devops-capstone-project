@@ -77,7 +77,15 @@ def list_accounts():
 ######################################################################
 
 # ... place you code here to READ an account ...
-
+@app.route('/accounts/<id>')
+def read_account(id):
+    """read an account"""
+    account=Account.find(id)
+    if not account:
+        abort(status.HTTP_404_NOT_FOUND,f"Account not found with id {id}")
+    
+    account_data=account.serialize()
+    return account_data,status.HTTP_200_OK
 
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT
