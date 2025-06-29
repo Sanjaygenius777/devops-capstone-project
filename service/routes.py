@@ -111,6 +111,16 @@ def update_account(account_id):
 ######################################################################
 
 # ... place you code here to DELETE an account ...
+@app.route('/accounts/<int:account_id>',methods=['DELETE'])
+def delete_account(account_id):
+    """delete account"""
+    app.logger.info("Request to delete an Account with id: %s", account_id)
+
+    account=Account.find(account_id)
+    if account:
+        account.delete()
+        return "",status.HTTP_204_NO_CONTENT
+
 
 
 ######################################################################
@@ -128,3 +138,4 @@ def check_content_type(media_type):
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         f"Content-Type must be {media_type}",
     )
+
